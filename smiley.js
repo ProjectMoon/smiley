@@ -98,6 +98,21 @@ function drawBody(ctx, x, y, radius) {
     ctx.translate(x, y);
     
     ctx.arc(0, 0, radius, 0, Math.PI*2);
+
+    var lightCircleX = x - (radius / 3);
+    var lightCircleY = y - (radius / 3);
+    var lightCircleRadius = radius / 3;
+
+    var darkCircleX = x + (radius / 3);
+    var darkCircleY = y + (radius / 3);
+    var darkCircleRadius = radius;
+
+    var rad = ctx.createRadialGradient(lightCircleX, lightCircleY, lightCircleRadius,
+				       darkCircleX, darkCircleY, darkCircleRadius);
+    rad.addColorStop(0, 'rgb(255,255,0)');
+    rad.addColorStop(.9, 'rgb(230,230,0)');
+    rad.addColorStop(1, 'rgb(0,0,0)');
+    ctx.fillStyle = rad;
     ctx.fill();
     
     ctx.restore();
@@ -246,7 +261,7 @@ function draw() {
     // If you are a graduate/masters student, uncomment this
     // line to test your parametric smiley.
     //drawSmiley(ctx,  50,  50,  50);
-    drawSmiley(ctx,  g_defaultSmileyX, g_defaultSmileyY, g_defaultSmileyRadius, 0);
+    drawSmiley(ctx,  g_defaultSmileyX, g_defaultSmileyY, g_defaultSmileyRadius);
 }
 
 window.onload = function() {

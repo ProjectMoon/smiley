@@ -120,7 +120,7 @@ function drawEyes(ctx, smileyX, smileyY, smileyRadius) {
 }
 
 function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
-    //top smiley portion
+    //top smiley portion: bezier curve setup
     var xOffset = smileyRadius * .5;
     var yOffset = smileyRadius * .4;
     var cpOffset = smileyRadius * .35;
@@ -156,7 +156,8 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     ctx.moveTo(startX, startY);
 
     //construction process: top curve, right line, bottom curve, left line.
-    //unless radius is too small because the lines don't scale well
+    //unless radius is too small because the lines don't scale well.
+    //then don't use lines.
     if (smileyRadius >= 120) {
 	ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, endX, endY);
 	ctx.lineTo(endX, startBottomY);
@@ -174,14 +175,13 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
 	ctx.fill();
     }
 
+    ctx.restore();
+
     //dimples
     var dimpleHeight = smileyRadius * .1;
     var dimpleWidth = dimpleHeight * .15;
     fillEllipse(ctx, startX, startY, dimpleHeight, dimpleWidth, -(Math.PI / 5));
-    fillEllipse(ctx, endX, endY, dimpleHeight, dimpleWidth, (Math.PI / 5));
-    
-    
-    ctx.restore();
+    fillEllipse(ctx, endX, endY, dimpleHeight, dimpleWidth, (Math.PI / 5)); 
 }
 
 function drawSmiley(ctx, cx, cy, radius, rotation) {

@@ -85,6 +85,10 @@ Stay within this 72 character margin, to keep your code easily readable
 // Well done if you can make the smile slightly thicker at the bottom!
 //
 
+function debug(text) {
+    document.getElementById('info').innerText = text;
+}
+
 function drawBody(ctx, x, y, radius) {
     ctx.save();
     
@@ -115,7 +119,52 @@ function drawEyes(ctx, smileyX, smileyY, smileyRadius) {
     ctx.restore();
 }
 
-function drawSmiley(ctx, cx, cy, radius) {
+function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
+    //top smiley portion
+    var xOffset = smileyRadius * .5;
+    var yOffset = smileyRadius * .4;
+    var cpOffset = smileyRadius * .35;
+    
+    var startX = smileyX - xOffset;
+    var startY = smileyY + yOffset;
+
+    var endX = smileyX + xOffset;
+    var endY = startY;
+
+    var cp1X = startX + cpOffset;
+    var cp1Y = startY + cpOffset;
+
+    var cp2X = cp1X + (smileyRadius * .3);
+    var cp2Y = cp1Y;
+
+    //bottom smiley portion
+    var bottomCP1X = cp1X + (smileyRadius * .05);
+    var bottomCP1Y = cp1Y + (smileyRadius * .05);
+    
+    var bottomCP2X = cp2X + (smileyRadius * .05);
+    var bottomCP2Y = cp2Y + (smileyRadius * .05);
+
+    debug(startX + ', ' + startY + '(' + cp1X + ', ' + cp1Y + ' || ' + cp2X + ', ' + cp2Y + ' || ' + endX + ', ' + endY + ')');
+    ctx.save();
+
+    ctx.lineWidth = 2;
+    ctx.stroketyle = 'black';
+    ctx.fillStyle = 'black';
+    
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+
+    //draw to endX, endY and then back to startX, startY
+    ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, endX, endY);
+    ctx.bezierCurveTo(cp2X, bottomCP2Y, cp1X, bottomCP1Y, startX, startY);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fill();
+    
+    ctx.restore();
+}
+
+function drawSmiley(ctx, cx, cy, radius, rotation) {
     var angle = rotation || 0;
     // Here's an example of how to use the fillEllipse helper-function
     //ctx.fillStyle = "green";
@@ -130,7 +179,7 @@ function drawSmiley(ctx, cx, cy, radius) {
     
     drawBody(ctx, cx, cy, radius);
     drawEyes(ctx, cx, cy, radius);
-    
+    drawSmile(ctx, cx, cy, radius);
     ctx.restore();
 }
 

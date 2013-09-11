@@ -137,14 +137,15 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     var cp2X = cp1X + (smileyRadius * .3);
     var cp2Y = cp1Y;
 
-    //bottom smiley portion
-    var bottomCP1X = cp1X + (smileyRadius * .05);
-    var bottomCP1Y = cp1Y + (smileyRadius * .05);
+    //very small lines connecting the two parts of the smiley
+    //makes it less pointy at the dimples
+    var startBottomY = endY + (smileyRadius * .005);
+    var endBottomY = startY + (smileyRadius * .005);
     
-    var bottomCP2X = cp2X + (smileyRadius * .05);
+    //bottom smiley portion
+    var bottomCP1Y = cp1Y + (smileyRadius * .05);
     var bottomCP2Y = cp2Y + (smileyRadius * .05);
 
-    debug(startX + ', ' + startY + '(' + cp1X + ', ' + cp1Y + ' || ' + cp2X + ', ' + cp2Y + ' || ' + endX + ', ' + endY + ')');
     ctx.save();
 
     ctx.lineWidth = 2;
@@ -154,12 +155,31 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     ctx.beginPath();
     ctx.moveTo(startX, startY);
 
-    //draw to endX, endY and then back to startX, startY
-    ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, endX, endY);
-    ctx.bezierCurveTo(cp2X, bottomCP2Y, cp1X, bottomCP1Y, startX, startY);
-    ctx.closePath();
-    ctx.stroke();
-    ctx.fill();
+    //construction process: top curve, right line, bottom curve, left line.
+    //unless radius is too small because the lines don't scale well
+    if (smileyRadius >= 120) {
+	ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, endX, endY);
+	ctx.lineTo(endX, startBottomY);
+	ctx.bezierCurveTo(cp2X, bottomCP2Y, cp1X, bottomCP1Y, startX, endBottomY);
+	ctx.lineTo(startX, startY);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.fill();
+    }
+    else {
+	ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, endX, endY);
+	ctx.bezierCurveTo(cp2X, bottomCP2Y, cp1X, bottomCP1Y, startX, startY);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.fill();
+    }
+
+    //dimples
+    var dimpleHeight = smileyRadius * .1;
+    var dimpleWidth = dimpleHeight * .15;
+    fillEllipse(ctx, startX, startY, dimpleHeight, dimpleWidth, -(Math.PI / 5));
+    fillEllipse(ctx, endX, endY, dimpleHeight, dimpleWidth, (Math.PI / 5));
+    
     
     ctx.restore();
 }

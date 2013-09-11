@@ -131,20 +131,21 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     var endX = smileyX + xOffset;
     var endY = startY;
 
+    //cp = control point
     var cp1X = startX + cpOffset;
     var cp1Y = startY + cpOffset;
 
     var cp2X = cp1X + (smileyRadius * .3);
     var cp2Y = cp1Y;
 
+    //bottom smiley portion: bezier curve setup
+    var bottomCP1Y = cp1Y + (smileyRadius * .05);
+    var bottomCP2Y = cp2Y + (smileyRadius * .05);
+
     //very small lines connecting the two parts of the smiley
     //makes it less pointy at the dimples
     var startBottomY = endY + (smileyRadius * .005);
     var endBottomY = startY + (smileyRadius * .005);
-    
-    //bottom smiley portion
-    var bottomCP1Y = cp1Y + (smileyRadius * .05);
-    var bottomCP2Y = cp2Y + (smileyRadius * .05);
 
     ctx.save();
 

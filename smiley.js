@@ -129,9 +129,7 @@ function drawBody(ctx, x, y, radius) {
     ctx.lineWidth = 1.5;
     ctx.strokeStyle = "black";
     ctx.stroke();
-
-    ctx.restore();
-    
+    ctx.restore();    
 }
 
 function drawEyes(ctx, smileyX, smileyY, smileyRadius) {
@@ -152,9 +150,8 @@ function drawEyes(ctx, smileyX, smileyY, smileyRadius) {
 
 function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     //top smiley portion: bezier curve setup
-    var xOffset = smileyRadius * .5;
+    var xOffset = smileyRadius * .6;
     var yOffset = smileyRadius * .4;
-    var cpOffset = smileyRadius * .35;
     
     var startX = smileyX - xOffset;
     var startY = smileyY + yOffset;
@@ -162,21 +159,19 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     var endX = smileyX + xOffset;
     var endY = startY;
 
-    //cp = control point
-    var cp1X = startX + cpOffset;
-    var cp1Y = startY + cpOffset;
-
-    var cp2X = cp1X + (smileyRadius * .3);
-    var cp2Y = cp1Y;
-
-    //bottom smiley portion: bezier curve setup
-    var bottomCP1Y = cp1Y + (smileyRadius * .05);
-    var bottomCP2Y = cp2Y + (smileyRadius * .05);
+    //quadratic curve control points (top and bottom)
+    var curveyFactor = 1.45;
+    var controlX = (startX + endX) / 2;
+    var controlY = startY + yOffset * curveyFactor;
+    
+    var bottomControlX = controlX;
+    var bottomControlY = controlY + yOffset / 4;
 
     //very small lines connecting the two parts of the smiley
     //makes it less pointy at the dimples
-    var startBottomY = endY + (smileyRadius * .005);
-    var endBottomY = startY + (smileyRadius * .005);
+    var lineLengthFactor = .02;
+    var startBottomY = endY + (smileyRadius * lineLengthFactor);
+    var endBottomY = startY + (smileyRadius * lineLengthFactor);
 
     ctx.save();
 
@@ -191,17 +186,17 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     //unless radius is too small because the lines don't scale well.
     //then don't use lines.
     if (smileyRadius >= 120) {
-	ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, endX, endY);
+	ctx.quadraticCurveTo(controlX, controlY, endX, endY);
 	ctx.lineTo(endX, startBottomY);
-	ctx.bezierCurveTo(cp2X, bottomCP2Y, cp1X, bottomCP1Y, startX, endBottomY);
+	ctx.quadraticCurveTo(bottomControlX, bottomControlY, startX, endBottomY);
 	ctx.lineTo(startX, startY);
 	ctx.closePath();
 	ctx.stroke();
 	ctx.fill();
     }
     else {
-	ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, endX, endY);
-	ctx.bezierCurveTo(cp2X, bottomCP2Y, cp1X, bottomCP1Y, startX, startY);
+	ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+	ctx.quadraticCurveTo(bottomControlX, bottomControlY, startX, startY);
 	ctx.closePath();
 	ctx.stroke();
 	ctx.fill();

@@ -94,28 +94,39 @@ function drawBody(ctx, x, y, radius) {
     
     ctx.beginPath();
     
-    ctx.fillStyle = "yellow";
     ctx.translate(x, y);
-    
-    ctx.arc(0, 0, radius, 0, Math.PI*2);
-
+    ctx.scale(radius, radius);
+    ctx.arc(0, 0, 1, 0, Math.PI*2);
+    //ctx.restore();
     //light circle is the lighter circle of the gradient, centered on
     //an area upper-left from the origin of the smiley.
-    ctx.translate(-x, -y); //otherwise it's off to the bottom right
-    var lightCircleX = x - (radius * .5);
-    var lightCircleY = y - (radius * .5);
-    var lightCircleRadius = radius * .2;
+    var lightCircleX = - .5;
+    var lightCircleY =  - .5;
+    var lightCircleRadius = 0;
 
-    var darkCircleX = x;;
-    var darkCircleY = y;
-    var darkCircleRadius = radius;
+    var darkCircleX = 0;
+    var darkCircleY = 0;
+    var darkCircleRadius = 1;
+
 
     var rad = ctx.createRadialGradient(lightCircleX, lightCircleY, lightCircleRadius,
 				       darkCircleX, darkCircleY, darkCircleRadius);
     rad.addColorStop(0, 'rgba(255,255,0,1)');
-    //rad.addColorStop(.5, 'rgba(200,200,0,1)');
-    rad.addColorStop(1, 'rgba(137,137,0,1)');
+    rad.addColorStop(.5, 'rgba(200,200,0,1)');
+    rad.addColorStop(1, 'rgba(100,100,0,1)');
+
     ctx.fillStyle = rad;
+
+    //skew and move slightly to make it look more like the picture
+    var hSkew = 1;
+    var vSkew = -1;
+    var hMove = -.5;
+    var vMove = -.5;
+    var hScale = 1;
+    var vScale = 1;
+    //originally used setTransform, but that completely
+    //resets the matrix, which we do not want!
+    ctx.transform(hScale, hSkew, vSkew, vScale, hMove, vMove);
     ctx.fill();
     
     ctx.restore();

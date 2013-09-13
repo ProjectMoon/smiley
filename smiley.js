@@ -149,7 +149,7 @@ function drawEyes(ctx, smileyX, smileyY, smileyRadius) {
 }
 
 function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
-    //top smiley portion: bezier curve setup
+    //initial smiley coordinate calculations
     var xOffset = smileyRadius * .6;
     var yOffset = smileyRadius * .4;
     

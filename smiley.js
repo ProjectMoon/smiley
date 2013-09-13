@@ -99,19 +99,22 @@ function drawBody(ctx, x, y, radius) {
     
     ctx.arc(0, 0, radius, 0, Math.PI*2);
 
-    var lightCircleX = x - (radius / 3);
-    var lightCircleY = y - (radius / 3);
-    var lightCircleRadius = radius / 3;
+    //light circle is the lighter circle of the gradient, centered on
+    //an area upper-left from the origin of the smiley.
+    ctx.translate(-x, -y); //otherwise it's off to the bottom right
+    var lightCircleX = x - (radius * .5);
+    var lightCircleY = y - (radius * .5);
+    var lightCircleRadius = radius * .2;
 
-    var darkCircleX = x + (radius / 3);
-    var darkCircleY = y + (radius / 3);
+    var darkCircleX = x;;
+    var darkCircleY = y;
     var darkCircleRadius = radius;
 
     var rad = ctx.createRadialGradient(lightCircleX, lightCircleY, lightCircleRadius,
 				       darkCircleX, darkCircleY, darkCircleRadius);
-    rad.addColorStop(0, 'rgb(255,255,0)');
-    rad.addColorStop(.9, 'rgb(230,230,0)');
-    rad.addColorStop(1, 'rgb(0,0,0)');
+    rad.addColorStop(0, 'rgba(255,255,0,1)');
+    //rad.addColorStop(.5, 'rgba(200,200,0,1)');
+    rad.addColorStop(1, 'rgba(137,137,0,1)');
     ctx.fillStyle = rad;
     ctx.fill();
     

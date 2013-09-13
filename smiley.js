@@ -203,19 +203,25 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     }
 
     ctx.restore();
+    drawDimples(ctx, startX, startY, endX, endY, smileyRadius);
+}
 
-    //dimples
+function drawDimples(ctx, startX, startY, endX, endY, smileyRadius) {
     var dimpleHeight = smileyRadius * .1;
     var dimpleWidth = dimpleHeight * .15;
     fillEllipse(ctx, startX, startY, dimpleHeight, dimpleWidth, -(Math.PI / 5));
     fillEllipse(ctx, endX, endY, dimpleHeight, dimpleWidth, (Math.PI / 5)); 
+
+}
+
+function drawBlood(ctx, x, y, radius) {
+    ctx.save();
+
+    ctx.restore();
 }
 
 function drawSmiley(ctx, cx, cy, radius, rotation) {
     var angle = rotation || 0;
-    // Here's an example of how to use the fillEllipse helper-function
-    //ctx.fillStyle = "green";
-    //fillEllipse(ctx, cx, cy, radius, radius, Math.PI/8);
     ctx.save();
     
     if (angle > 0) {
@@ -227,6 +233,7 @@ function drawSmiley(ctx, cx, cy, radius, rotation) {
     drawBody(ctx, cx, cy, radius);
     drawEyes(ctx, cx, cy, radius);
     drawSmile(ctx, cx, cy, radius);
+    drawBlood(ctx, cx, cy, radius);
     ctx.restore();
 }
 

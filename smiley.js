@@ -91,45 +91,47 @@ function debug(text) {
 
 function drawBody(ctx, x, y, radius) {
     ctx.save();
-    
+
+    //unit circle makes this much easier.
     ctx.beginPath();
     
     ctx.translate(x, y);
     ctx.scale(radius, radius);
     ctx.arc(0, 0, 1, 0, Math.PI*2);
-    //ctx.restore();
-    //light circle is the lighter circle of the gradient, centered on
-    //an area upper-left from the origin of the smiley.
-    var lightCircleX = - .5;
-    var lightCircleY =  - .5;
-    var lightCircleRadius = 0;
 
-    var darkCircleX = 0;
-    var darkCircleY = 0;
-    var darkCircleRadius = 1;
-
-
-    var rad = ctx.createRadialGradient(lightCircleX, lightCircleY, lightCircleRadius,
-				       darkCircleX, darkCircleY, darkCircleRadius);
+    //lighter circle up and to the left
+    //darker circle centered on origin
+    var rad = ctx.createRadialGradient(.5, .5, .15,
+				       0, 0, 1);
+				       
     rad.addColorStop(0, 'rgba(255,255,0,1)');
-    rad.addColorStop(.5, 'rgba(200,200,0,1)');
-    rad.addColorStop(1, 'rgba(100,100,0,1)');
+    rad.addColorStop(.5, 'rgba(220,220,0,1)');
+    rad.addColorStop(1, 'rgba(180,180,0,1)');
 
     ctx.fillStyle = rad;
 
     //skew and move slightly to make it look more like the picture
-    var hSkew = 1;
-    var vSkew = -1;
-    var hMove = -.5;
+    var hSkew = .8;
+    var vSkew = -.7;
+    var hMove = -.3;
     var vMove = -.5;
     var hScale = 1;
     var vScale = 1;
     //originally used setTransform, but that completely
     //resets the matrix, which we do not want!
+    
     ctx.transform(hScale, hSkew, vSkew, vScale, hMove, vMove);
     ctx.fill();
-    
     ctx.restore();
+
+    //pop got rid of the transformations that would make stroke huge
+    ctx.save();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+
+    ctx.restore();
+    
 }
 
 function drawEyes(ctx, smileyX, smileyY, smileyRadius) {

@@ -188,7 +188,9 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
     if (smileyRadius >= 120) {
 	ctx.quadraticCurveTo(controlX, controlY, endX, endY);
 	ctx.lineTo(endX, startBottomY);
-	ctx.quadraticCurveTo(bottomControlX, bottomControlY, startX, endBottomY);
+	ctx.quadraticCurveTo(bottomControlX, bottomControlY,
+			     startX, endBottomY);
+	
 	ctx.lineTo(startX, startY);
 	ctx.closePath();
 	ctx.stroke();
@@ -220,27 +222,113 @@ function drawBlood(ctx, x, y, radius) {
     ctx.translate(x, y);
     ctx.scale(radius, radius);
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(-.8, -.75);
-    //starting from upper left:
-    //arc (first drop)
 
+    drawBloodStreak(ctx, x, y, radius);
+    drawBloodTriangle(ctx, x, y, radius);
+}
+
+function drawBloodStreak(ctx, x, y, radius) {
+    //main blood streak
+    ctx.moveTo(-.05, .3);
+    ctx.lineTo(-.7, -.6);
     
-    //ctx.setTransform(1, .75, .75, 1, 0, 0);
-    ctx.arcTo(-.8 + .02, -.75, -.8 + -.1, -.75 + .75, .75);
+    ctx.restore();
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 8;
+    ctx.stroke();
+
+    //blob of blood at bottom of streak
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(radius, radius);
+    
+    ctx.beginPath();
+    ctx.translate(-.085, .25);
+    ctx.rotate(Math.PI / 3.4);
+    ctx.scale(.12, .037);
+    ctx.arc(0, 0, 1, 0, Math.PI * 2);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+    ctx.restore();
+}
+
+function drawBloodTriangle(ctx, x, y, radius) {
+    //triangle shape at the top of the streak
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(radius, radius);
+
+    //triangular shape at the top of the streak.
+    ctx.save();
+    ctx.translate(-.73, -.63);
+    ctx.rotate(Math.PI / 15);
+    ctx.scale(.25, .25);
+
+    ctx.beginPath();
+
+    //transform to make it a bit more like the picture
+    ctx.transform(1.2, .5, .5, 1.2, -.03, -.08);
+
+    //unit triangle
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, 1);
+    ctx.lineTo(1, 0);
+    ctx.lineTo(0, 0);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+
+    //removes the tfs/tls for the triangle
+    ctx.restore();
+
+    //arc at the top of the triangle to make it less pointy.
+    ctx.save();
+    ctx.rotate(Math.PI / 4);
+    ctx.translate(-.93, .07);
+    ctx.scale(.05, .025);
+    ctx.arc(0, 0, 1, 0, Math.PI * 2);
+    ctx.fillStyle = 'red';
+    ctx.fill();
 
     ctx.restore();
-    
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 1;
-    ctx.stroke();
+
+    //bottom left drop (smaller)
+    ctx.save();
+    ctx.translate(-.65, -.35);
+    ctx.rotate(Math.PI * 1.05);
+    ctx.scale(.025, .05);
+    ctx.arc(0, 0, 1, 0, Math.PI * 2);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+    ctx.restore();
+
+    //bottom left drop (larger)
+    ctx.save();
+    ctx.translate(-.6, -.325);
+    ctx.rotate(Math.PI * 1.025);
+    ctx.scale(.025, .2);
+    ctx.arc(0, 0, 1, 0, Math.PI * 2);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+    ctx.restore();
+
+    //bottom right drop
+    ctx.save();
+    ctx.translate(-.5, -.46);
+    ctx.rotate(Math.PI / 1.5);
+    ctx.scale(.025, .2);
+    ctx.arc(0, 0, 1, 0, Math.PI * 2);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+    ctx.restore();
+
+    ctx.restore();
 }
 
 function drawSmiley(ctx, cx, cy, radius, rotation) {
     var angle = rotation || 0;
     ctx.save();
     
-    if (angle > 0) {
+    if (angle != 0) {
 	ctx.translate(cx, cy);
 	ctx.rotate(angle);
 	ctx.translate(-cx, -cy);

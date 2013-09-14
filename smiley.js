@@ -234,7 +234,7 @@ function drawBloodStreak(ctx, x, y, radius) {
     
     ctx.restore();
     ctx.strokeStyle = 'red';
-    ctx.lineWidth = 8;
+    ctx.lineWidth = radius / 25;
     ctx.stroke();
 
     //blob of blood at bottom of streak

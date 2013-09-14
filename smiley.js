@@ -202,8 +202,9 @@ function drawSmile(ctx, smileyX, smileyY, smileyRadius) {
 	ctx.fill();
     }
 
-    ctx.restore();
     drawDimples(ctx, startX, startY, endX, endY, smileyRadius);
+    ctx.restore();
+
 }
 
 function drawDimples(ctx, startX, startY, endX, endY, smileyRadius) {
@@ -211,13 +212,28 @@ function drawDimples(ctx, startX, startY, endX, endY, smileyRadius) {
     var dimpleWidth = dimpleHeight * .15;
     fillEllipse(ctx, startX, startY, dimpleHeight, dimpleWidth, -(Math.PI / 5));
     fillEllipse(ctx, endX, endY, dimpleHeight, dimpleWidth, (Math.PI / 5)); 
-
 }
 
 function drawBlood(ctx, x, y, radius) {
     ctx.save();
 
+    ctx.translate(x, y);
+    ctx.scale(radius, radius);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-.8, -.75);
+    //starting from upper left:
+    //arc (first drop)
+
+    
+    //ctx.setTransform(1, .75, .75, 1, 0, 0);
+    ctx.arcTo(-.8 + .02, -.75, -.8 + -.1, -.75 + .75, .75);
+
     ctx.restore();
+    
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 1;
+    ctx.stroke();
 }
 
 function drawSmiley(ctx, cx, cy, radius, rotation) {
